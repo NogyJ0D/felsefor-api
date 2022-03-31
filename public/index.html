@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+
+  <form id="payment-form">
+    <div id="payment-element">
+      <!--Stripe.js injects the Payment Element-->
+    </div>
+    <button id="submit">
+      <div class="spinner hidden" id="spinner"></div>
+      <span id="button-text">Pay now</span>
+    </button>
+    <div id="payment-message" class="hidden"></div>
+  </form>
+
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <script>
+    const stripe = Stripe('pk_test_51KifweI1XgjcsrLOZMzZ9X9QAdCbMkOVyYQJ7Ju3pTQwLdOagU8phWIntq6MSoc3vubNM7eZep1yKGF7Rq2yLIEs00H0b8h7ha')
+
+    fetch("http://localhost:4000/payments/intent", {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        body: JSON.stringify({
+          amount: 100,
+        })
+      }).then(res => res.json())
+      .then(data => {
+        const elements = stripe.elements({
+          appearance: {
+            theme: 'stripe',
+          },
+          clientSecret: data.clientSecret
+        })
+
+        const paymentElement = elements.create("payment");
+        paymentElement.mount("#payment-element");
+      })
+  </script>
+
+</body>
+
+</html>
