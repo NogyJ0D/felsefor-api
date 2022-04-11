@@ -5,22 +5,32 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon --ignore 'logs/*' index.js",
+    "stripe-listen": "stripe listen --forward-to localhost:4000/payments/webhooks"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "5.18.3",
     "bcrypt": "5.0.1",
+    "consolidate": "0.16.0",
     "cookie-parser": "1.4.6",
     "cors": "2.8.5",
     "dotenv": "16.0.0",
     "express": "4.17.3",
     "jsonwebtoken": "8.5.1",
+    "mongoose": "6.2.9",
+    "mongoose-paginate-v2": "1.6.3",
+    "mongoose-unique-validator": "3.0.0",
     "morgan": "1.10.0",
+    "multer": "1.4.4",
+    "nodemailer": "6.7.3",
     "passport": "0.5.2",
+    "passport-google-oauth20": "2.0.0",
     "rotating-file-stream": "3.0.3",
-    "stripe": "8.214.0"
+    "stripe": "8.214.0",
+    "swig": "1.4.2"
   },
   "devDependencies": {
     "nodemon": "2.0.15",
