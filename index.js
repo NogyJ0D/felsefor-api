@@ -43,7 +43,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:3000', 'http://localhost:4000']
+  origin: ['http://localhost:3000', 'http://localhost:4000', 'https://felsefor.web.app']
 }))
 
 // Routing
