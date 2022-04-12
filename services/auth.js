@@ -21,7 +21,8 @@ class Auth {
       role: user.role,
       profile_pic: user.logoUrl,
       customerId: user.customerId,
-      address: user.address
+      address: user.address,
+      cartId: user.cartId
     }
     const token = jwt.sign({ username: data.username, email: data.email, id: data.id, role: data.role }, jwtSecret, { expiresIn: '7d' })
     return { data, token }

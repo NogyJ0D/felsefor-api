@@ -3,7 +3,6 @@ const { uploadFile } = require('../libs/storage')
 const Category = require('./categories')
 const ProductModel = require('../models/product')
 const stripe = require('stripe')(stripeSK)
-// const mongoosePaginate = require('mongoose-paginate-v2')
 
 class Products {
   constructor () {
@@ -21,11 +20,11 @@ class Products {
 
   async getAll (limit) {
     // return await ProductModel.find()
-    return await ProductModel.paginate({}, { limit })
+    return await ProductModel.paginate({}, { limit, populate: { path: 'categories', select: 'name' } })
   }
 
   async getByFilter (filter, limit) {
-    return await ProductModel.paginate({ categories: filter }, { limit })
+    return await ProductModel.paginate({ categories: filter }, { limit, populate: { path: 'categories', select: 'name' } })
   }
 
   async create (data, file) {
@@ -69,7 +68,7 @@ class Products {
   }
 
   async getProduct (id) {
-    const product = await ProductModel.findOne({ _id: id })
+    const product = await ProductModel.findOne({ _id: id }).populate('categories name')
 
     if (!product) return { fail: true, message: 'Ese producto no existe.' }
     return product
@@ -99,6 +98,22 @@ class Products {
     await stripe.products.del(exists.stripeId)
     await this.categories.delItem(id)
     return await ProductModel.findByIdAndDelete(id)
+  }
+
+  async reduceProductAmount (id, amount) {
+    if (!id || !amount) return { fail: true, message: 'Ingrese los datos.' }
+
+    const product = await ProductModel.findById(id)
+    const newAmount = product.totalAmount - amount
+    return await ProductModel.findOneAndUpdate({ _id: id }, { $set: { totalAmount: newAmount } })
+  }
+
+  async increaseProductAmount (id, amount) {
+    if (!id || !amount) return { fail: true, message: 'Ingrese los datos.' }
+
+    const product = await ProductModel.findById(id)
+    const newAmount = product.totalAmount + amount
+    return await ProductModel.findOneAndUpdate({ _id: id }, { $set: { totalAmount: newAmount } })
   }
 }
 

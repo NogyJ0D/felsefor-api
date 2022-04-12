@@ -26,6 +26,7 @@ const usersRoutes = require('./routes/users')
 const productsRoutes = require('./routes/products')
 const categoriesRoutes = require('./routes/categories')
 const filesRoutes = require('./routes/files')
+const cartsRoutes = require('./routes/carts')
 
 // Morgan
 const rfsStream = createStream('./logs/log.json', {
@@ -52,6 +53,7 @@ usersRoutes(app)
 productsRoutes(app)
 categoriesRoutes(app)
 filesRoutes(app)
+cartsRoutes(app)
 
 // Starting
 app.get('/', (req, res) => {
