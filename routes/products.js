@@ -9,11 +9,11 @@ const products = app => {
   app.use('/products', router)
 
   router.get('/all', async (req, res) => {
-    const { filter, limit } = req.query
+    const { filter, limit, page } = req.query
     let products
 
-    if (filter === 'none') products = await productService.getAll(limit)
-    else products = await productService.getByFilter(filter, limit)
+    if (filter === 'none') products = await productService.getAll(limit, page)
+    else products = await productService.getByFilter(filter, limit, page)
 
     return res.status(200).json(products)
   })
@@ -41,6 +41,8 @@ const products = app => {
       ? res.status(400).json(response)
       : res.status(200).json(response)
   })
+
+  // TODO: quitar categoría
 
   router.delete('/id/:productId', isProductManager, async (req, res) => {
     const response = await productService.deleteProduct(req.params.productId)

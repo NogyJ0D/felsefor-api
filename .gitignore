@@ -3,3 +3,5 @@
 node_modules/
 credentials-gcloud.json
 logs/
+.gcloudignore
+app.yaml

@@ -11,6 +11,8 @@ class Carts {
   }
 
   async getByUserId (id) {
+    if (!id) return { fail: true, message: 'Ingrese el id del usuario.' }
+
     const cart = await CartModel.findOne({ userId: id })
     if (!cart) return { fail: true, message: '' }
 
@@ -23,6 +25,8 @@ class Carts {
   }
 
   async create (userId) {
+    if (!userId) return { fail: true, message: 'Ingrese el id del usuario.' }
+
     try {
       return await new CartModel({
         userId,
@@ -35,6 +39,8 @@ class Carts {
   }
 
   async addItem (id, data) {
+    if (!id || !data) return { fail: true, message: 'Llene los campos.' }
+
     try {
       const cart = await CartModel.findOne({ _id: id })
       if (!cart) return { fail: true, message: 'No existe ese carrito.' }
@@ -64,6 +70,8 @@ class Carts {
   }
 
   async reduceItem (id, data) {
+    if (!id || !data) return { fail: true, message: 'Llene los campos.' }
+
     try {
       const cart = await CartModel.findOne({ _id: id })
       if (!cart) return { fail: true, message: 'No existe ese carrito.' }
@@ -89,6 +97,8 @@ class Carts {
   }
 
   async delItem (idCart, itemId) {
+    if (!idCart || !itemId) return { fail: true, message: 'Llene los campos.' }
+
     try {
       const cart = await CartModel.findOne({ _id: idCart })
       if (!cart) return { fail: true, message: 'No existe ese carrito.' }
@@ -111,10 +121,13 @@ class Carts {
   }
 
   async clearAndConfirm (cartId) {
+    if (!cartId) return { fail: true, message: 'Llene los campos.' }
+
     const cart = await CartModel.findOne({ _id: cartId })
 
-    cart.products.forEach(prod => {
-      this.products.reduceProductAmount(prod.itemId, prod.quantity)
+    cart.products.forEach(async prod => {
+      await this.products.increaseProductAmount(prod.itemId, prod.quantity)
+      await this.products.reduceProductAmount(prod.itemId, prod.quantity)
     })
 
     const newCart = await CartModel.findOneAndUpdate({ _id: cartId }, { $set: { products: [] } }, { new: true })

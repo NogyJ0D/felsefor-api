@@ -50,22 +50,23 @@ const auth = app => {
     }).json({ loggedOut: true })
   })
 
-  router.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }))
-  router.get('/google/callback', passport.authenticate('google'), async (req, res) => {
-    const profile = {
-      username: req.user.profile.displayName,
-      firstname: req.user.profile.name.givenName,
-      lastname: req.user.profile.name.familyName,
-      email: req.user.profile.emails[0].value || null,
-      role: 1,
-      logoUrl: req.user.profile.photos[0].value || null,
-      provider: req.user.profile.provider,
-      idProvider: req.user.profile.id
-    }
-    const response = await authService.loginProvider(profile)
+  // router.get('/google', passport.authenticate('google', { scope: ['email', 'profile', 'address'] }))
+  // router.get('/google/callback', passport.authenticate('google'), async (req, res) => {
+  //   console.log(req.user)
+  //   const profile = {
+  //     username: req.user.profile.displayName,
+  //     firstname: req.user.profile.name.givenName,
+  //     lastname: req.user.profile.name.familyName,
+  //     email: req.user.profile.emails[0].value || null,
+  //     role: 1,
+  //     logoUrl: req.user.profile.photos[0].value || null,
+  //     provider: req.user.profile.provider,
+  //     idProvider: req.user.profile.id
+  //   }
+  //   // const response = await authService.loginProvider(profile)
 
-    return tokenCookie(res, response)
-  })
+  //   // return tokenCookie(res, response)
+  // })
 
   router.post('/validate', isNew, async (req, res) => {
     const response = await authService.validateUser(req.user)

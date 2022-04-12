@@ -18,17 +18,15 @@ class Products {
     return { fail: true, message: errorMessages }
   }
 
-  async getAll (limit) {
-    // return await ProductModel.find()
-    return await ProductModel.paginate({}, { limit, populate: { path: 'categories', select: 'name' } })
+  async getAll (limit, page) {
+    return await ProductModel.paginate({}, { limit, page, populate: { path: 'categories', select: 'name' } })
   }
 
-  async getByFilter (filter, limit) {
-    return await ProductModel.paginate({ categories: filter }, { limit, populate: { path: 'categories', select: 'name' } })
+  async getByFilter (filter, limit, page) {
+    return await ProductModel.paginate({ categories: filter }, { limit, page, populate: { path: 'categories', select: 'name' } })
   }
 
   async create (data, file) {
-    console.log(data)
     if (!data.name || !data.description || !data.unitPrice) return { fail: true, message: 'Debes ingresar nombre, descripción y precio unitario.' }
 
     data.logoUrl = '/files/product_placeholder.png'
